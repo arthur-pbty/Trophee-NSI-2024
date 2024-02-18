@@ -1,30 +1,72 @@
 {% extends "compoments/base.html" %}
 {% block content %}
 
-<h1 class="text-4xl mb-6">Bienvenue sur notre site !</h1>
-{% if current_user.is_authenticated %}
-  <p class="mb-6">Vous êtes connecté en tant que {{ current_user.username }}.</p>
-{% endif %}
-<p class="mb-6">Nous sommes ravis de vous voir ici. Vous pouvez vous connecter ou vous inscrire pour accéder à plus de fonctionnalités.</p>
+<div class="bg-gray-800 text-white w-full h-16 fixed top-0 flex items-center justify-between z-50 px-28">
+  <img src="{{ url_for('static', filename='img/logo.png') }}" alt="SportUnity" class="w-16 h-16 mr-8">
+  <div class="space-x-4 flex">
+    <a href="#" class="hover:text-gray-300 transition duration-200">Accueil</a>
+    <a href="#welcome">Bienvenue</a>
+    <a href="#aboute" class="hover:text-gray-300 transition duration-200">À propos</a>
+    <a href="#services" class="hover:text-gray-300 transition duration-200">Services</a>
+    <a href="#contact" class="hover:text-gray-300 transition duration-200">Contact</a>
+    
+    <div class="border-l h-5 border-gray-500 mx-2"></div>
 
-<div class="flex space-x-4">
-  {% if current_user.is_authenticated %}
-    <a href="{{ url_for('logout') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
-    <a href="{{ url_for('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Dashboard</a>
-    <a href="{{ url_for('profile') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Profile</a>
-  {% else %}
-    <a href="{{ url_for('login') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-      Se connecter
-    </a>
-    <a href="{{ url_for('register') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-      S'inscrire
-    </a>
-  {% endif %}
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('logout') }}" class="hover:text-gray-300 transition duration-200">Déconnexion</a>
+      <a href="{{ url_for('dashboard') }}" class="hover:text-gray-300 transition duration-200">Dashboard</a>
+      <a href="{{ url_for('profile') }}" class="hover:text-gray-300 transition duration-200">Profile</a>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="hover:text-gray-300 transition duration-200">Se connecter</a>
+      <a href="{{ url_for('register') }}" class="hover:text-gray-300 transition duration-200">S'inscrire</a>
+    {% endif %}
+  </div>
 </div>
 
-<div class="mt-12">
-  <h2 class="text-2xl mb-4">À propos de nous</h2>
-  <p>Nous sommes une entreprise dédiée à fournir les meilleures solutions pour nos clients. Nous croyons en la création de produits de qualité et en la satisfaction du client.</p>
+<div style="background: url({{ url_for('static', filename='img/bg.jpg') }}) no-repeat center center; background-size: cover;" class="bg-bottom-fade h-screen">
+  <div class="flex flex-col justify-center items-center h-screen">
+    <h1 class="text-white text-6xl mb-6 font-bold">Bienvenue sur SportUnity !</h1>
+    <p class="text-white text-lg font-semibold">Profitez de nos services sportifs de qualité.</p>
+  </div>
 </div>
+
+<div class="mx-24 mt-4">
+  <div id="welcome" class="pt-16">
+    <h1 class="text-4xl mb-6">Bienvenue sur notre site !</h1>
+    {% if current_user.is_authenticated %}
+      <p class="mb-6">Bienvenue, {{ current_user.username }} ! Vous êtes connecté en tant que membre de notre communauté sportive.</p>
+    {% else %}
+      <p class="mb-6">Nous sommes ravis de vous voir ici. Connectez-vous ou inscrivez-vous pour profiter pleinement de notre plateforme.</p>
+      <div class="flex space-x-4">
+        <a href="{{ url_for('login') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Se connecter
+        </a>
+        <a href="{{ url_for('register') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          S'inscrire
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div id="aboute" class="pt-16">
+    <h2 class="text-2xl mb-4">À propos de nous</h2>
+    <p>Nous sommes une entreprise passionnée dédiée à fournir les meilleures solutions pour nos clients dans le domaine du sport. Chez SportUnity, nous croyons en la création de produits de qualité et en la satisfaction du client.</p>
+  </div>
+
+  <div id="services" class="pt-16">
+    <h2 class="text-2xl mb-4">Nos services</h2>
+    <p>Explorez nos services variés conçus pour répondre à vos besoins sportifs. Que vous soyez un athlète professionnel cherchant à optimiser vos performances ou un amateur de fitness en quête de nouvelles expériences, nous avons quelque chose pour vous.</p>
+  </div>
+
+  <div id="contact" class="pt-16">
+    <h2 class="text-2xl mb-4">Contactez-nous</h2>
+    <p>Si vous avez des questions, des commentaires ou des préoccupations, n'hésitez pas à nous contacter. Notre équipe est toujours prête à vous aider dans votre parcours sportif.</p>
+  </div>
+</div>
+
+<footer class="flex items-center mt-24 justify-between px-24 flex-wrap bg-gray-800 h-24">
+  <span class="pr-5 text-white">&copy; 2024 - Arthur Puechberty</span>
+  <a href="#" target="_blank" class="no-underline font-semibold text-white">Conditions générales</a>
+</footer>
 
 {% endblock %}

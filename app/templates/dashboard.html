@@ -1,7 +1,7 @@
 {% extends "compoments/base.html" %}
 {% block content %}
 
-  <h1>Tableau de bord</h1>
+  <h1 class="text-4xl mb-6">Tableau de bord</h1>
   <p>Bienvenue sur votre tableau de bord, {{ current_user.username }}!</p>
   <div class="pt-8">
     <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
@@ -38,22 +38,11 @@
   </div>
   <div class="pb-8">
     <h2 class="pt-8">Liste de mes groupes :</h2>
-    <ul>
-      <h3>Liste des groupes ou je suis admin :</h3>
-      {% for group in myGroupsAdmin %}
-        <li>
-          <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-    <ul>
-      <h3>Liste des groupes ou je suis membre :</h3>
+    <div>
       {% for group in myGroupsMember %}
-        <li>
-          <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
-        </li>
+        <a href="{{ url_for('group', id=group.id) }}" class="inline-block p-10 rounded shadow-md bg-gray-200 hover:bg-gray-300 transition duration-200">{{ group.name }}</a>
       {% endfor %}
-    </ul>
+    </div>
   </div>
   <a href="{{ url_for('chercheGroup') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Rechercher des Groupe Public</a>
 
