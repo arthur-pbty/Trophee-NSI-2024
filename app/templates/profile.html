@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Profile</title>
+</head>
+<body>
+  <h1>Profil</h1>
+  <form method="POST">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
+    {% endif %} {% endwith %}
+    <label for="username">Nom d'utilisateur</label>
+    <input id="username" name="username" type="text" value="{{ current_user.username }}">
+
+    <label for="password">Mot de passe</label>
+    <input id="password" name="password" type="password">
+
+    <input type="submit" value="Enregistrer les modifications">
+
+    <label for="delete">Supprimer le compte</label>
+    <input id="delete" name="delete" type="checkbox">
+    <input type="submit" value="Supprimer le compte">
+  </form>
+</body>
+</html>

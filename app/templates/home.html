@@ -5,6 +5,9 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-200 p-6">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
+    {% endif %} {% endwith %}
     <h1 class="text-4xl mb-6">Bienvenue sur notre site !</h1>
     {% if current_user.is_authenticated %}
         <p class="mb-6">Vous êtes connecté en tant que {{ current_user.username }}.</p>
@@ -15,6 +18,7 @@
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('logout') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
             <a href="{{ url_for('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Dashboard</a>
+            <a href="{{ url_for('profile') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Profile</a>
         {% else %}
             <a href="{{ url_for('login') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Se connecter
