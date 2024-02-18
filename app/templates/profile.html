@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <title>Profile</title>
-</head>
-<body>
-  <h1>Profil</h1>
-  <form method="POST">
-    {% with messages = get_flashed_messages() %} {% if messages %}
-      <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-    {% endif %} {% endwith %}
-    <label for="username">Nom d'utilisateur</label>
-    <input id="username" name="username" type="text" value="{{ current_user.username }}">
+{% extends "compoments/base.html" %}
+{% block content %}
 
-    <label for="password">Mot de passe</label>
-    <input id="password" name="password" type="password">
+<h1>Profil</h1>
+<form method="POST">
+  {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
+  {% endif %} {% endwith %}
+  <label for="username">Nom d'utilisateur</label>
+  <input id="username" name="username" type="text" value="{{ current_user.username }}">
 
-    <input type="submit" value="Enregistrer les modifications">
+  <label for="password">Mot de passe</label>
+  <input id="password" name="password" type="password">
 
-    <label for="delete">Supprimer le compte</label>
-    <input id="delete" name="delete" type="checkbox">
-    <input type="submit" value="Supprimer le compte">
-  </form>
-  <div class="pt-8">
-    <a href="{{ url_for('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Dashboard</a>
-    <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
-    <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
-  </div>
-</body>
-</html>
+  <input type="submit" value="Enregistrer les modifications">
+
+  <label for="delete">Supprimer le compte</label>
+  <input id="delete" name="delete" type="checkbox">
+  <input type="submit" value="Supprimer le compte">
+</form>
+<div class="pt-8">
+  <a href="{{ url_for('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Dashboard</a>
+  <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
+  <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
+</div>
+
+{% endblock %}

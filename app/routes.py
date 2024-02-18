@@ -7,12 +7,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 @app.route('/')
 def home():
-  return render_template('home.html', titre='Accueil', current_user=current_user)
-
-
-@app.route('/about')
-def about():
-  return "Page à propos"
+  return render_template('home.html', title='Accueil', current_user=current_user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -29,7 +24,7 @@ def login():
     else:
       flash('Nom d\'utilisateur ou mot de passe incorrect')
 
-  return render_template('login.html')
+  return render_template('login.html', title='Connexion')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -48,7 +43,7 @@ def register():
       db.session.add(new_user)
       db.session.commit()
       login_user(new_user)
-      return redirect(url_for('home'))
+      return redirect(url_for('home'), title='Inscription')
 
   return render_template('register.html')
 
@@ -69,7 +64,7 @@ def dashboard():
       myGroups.append(group)
   print(myGroups)
 
-  return render_template('dashboard.html', titre='Tableau de bord', current_user=current_user, myGroups=myGroups, groupsPublic=groupsPublic)
+  return render_template('dashboard.html', title='Tableau de bord', current_user=current_user, myGroups=myGroups, groupsPublic=groupsPublic)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -134,4 +129,4 @@ def group(id):
   group = Groups.query.get(id)
   if group is None:
       abort(404)
-  return render_template('group.html', group=group)
+  return render_template('group.html', title=group.name, group=group)
