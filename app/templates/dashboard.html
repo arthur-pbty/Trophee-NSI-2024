@@ -9,5 +9,49 @@
 <body>
   <h1>Tableau de bord</h1>
   <p>Bienvenue sur votre tableau de bord, {{ current_user.username }}!</p>
+  <div class="pt-8">
+    <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
+    <a href="{{ url_for('profile') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Profile</a>
+    <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
+  </div>
+  <div>
+    <h2 class="pt-8">Créer un groupe</h2>
+    <form action="{{ url_for('create_group') }}" method="post">
+      {% with messages = get_flashed_messages() %} {% if messages %}
+        <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+          Nom du groupe
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" name="name" type="text" placeholder="Nom du groupe">
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+          Description
+        </label>
+        <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" name="description" placeholder="Description"></textarea>
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="private">
+          Groupe privé
+        </label>
+        <input type="checkbox" id="private" name="private" checked>
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Créer
+        </button>
+      </div>
+    </form>
+  </div>
+  <div>
+    <h2 class="pt-8">Liste de mes groupes :</h2>
+    <ul>
+      {% for group in myGroups %}
+        <li>
+          <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
+        </li>
+      {% endfor %}
 </body>
 </html>

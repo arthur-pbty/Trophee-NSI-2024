@@ -24,5 +24,10 @@
     <input id="delete" name="delete" type="checkbox">
     <input type="submit" value="Supprimer le compte">
   </form>
+  <div class="pt-8">
+    <a href="{{ url_for('dashboard') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Dashboard</a>
+    <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
+    <a href="{{ url_for('logout') }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Déconnexion</a>
+  </div>
 </body>
 </html>
