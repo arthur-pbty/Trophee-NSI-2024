@@ -4,12 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <title>{{ title }}</title>
+  <title>SportUnity - {{ title }}</title>
 </head>
 <body>
-  {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-  {% endif %} {% endwith %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div id="messageDiv" class="text-white font-bold py-2 px-4 rounded absolute top-8 right-8 {{ 'bg-green-500' if category == 'success' else 'bg-red-500' }}">
+          <span id="closeBtn" style="cursor:pointer; float:left;" class="pr-2">X</span>
+          {{ message }}
+        </div>
+      {% endfor %}
+      <script>
+        document.getElementById('closeBtn').addEventListener('click', function() {
+          document.getElementById('messageDiv').style.display = 'none';
+        });
+      </script>
+    {% endif %}
+  {% endwith %}
   
   {% block content %}{% endblock %}
 </body>

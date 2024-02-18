@@ -22,7 +22,7 @@ def login():
       login_user(user)
       return redirect(url_for('home'))
     else:
-      flash('Nom d\'utilisateur ou mot de passe incorrect')
+      flash('Nom d\'utilisateur ou mot de passe incorrect', 'error')
 
   return render_template('login.html', title='Connexion')
 
@@ -36,13 +36,14 @@ def register():
     user = Users.query.filter_by(username=username).first()
 
     if user:
-      flash('Ce nom d\'utilisateur est déjà pris')
+      flash('Ce nom d\'utilisateur est déjà pris', 'error')
     else:
       new_user = Users(username=username, password_hash=generate_password_hash(password, method='pbkdf2:sha256'))
 
       db.session.add(new_user)
       db.session.commit()
       login_user(new_user)
+      flash('Votre compte a été créé', 'success')
       return redirect(url_for('home'))
 
   return render_template('register.html', title='Inscription')
@@ -79,21 +80,21 @@ def profile():
     if username:
       if current_user.username != username:
         if Users.query.filter_by(username=username).first():
-          flash('Ce nom d\'utilisateur est déjà pris')
+          flash('Ce nom d\'utilisateur est déjà pris', 'error')
           return redirect(url_for('profile'))
         current_user.username = username
-        flash('Votre nom d\'utilisateur a été modifié.')
+        flash('Votre nom d\'utilisateur a été modifié.', 'success')
     if password:
       current_user.set_password(password)
-      flash('Votre mot de passe a été modifié.')
+      flash('Votre mot de passe a été modifié.', 'success')
     if delete:
       db.session.delete(current_user)
-      logout_user()
-      flash('Votre compte a été supprimé.')
+      db.session.commit()
+      flash('Votre compte a été supprimé.', 'success')
       return redirect(url_for('home'))
 
     db.session.commit()
-    flash('Vos modifications ont été enregistrées.')
+    flash('Vos modifications ont été enregistrées.', 'success')
     return redirect(url_for('profile'))
 
   return render_template('profile.html', title='Profil')
@@ -112,14 +113,14 @@ def create_group():
 
   if name:
     if Groups.query.filter_by(name=name).first():
-      flash('Ce nom de groupe est déjà pris')
+      flash('Ce nom de groupe est déjà pris', 'error')
     else:
       new_group = Groups(name=name, description=description, private=private, admins=[current_user.id], members=[current_user.id])
       db.session.add(new_group)
       db.session.commit()
-      flash('Le groupe a été créé.')
+      flash('Le groupe a été créé.', 'success')
   else:
-    flash('Le nom du groupe est requis')
+    flash('Le nom du groupe est requis', 'error')
 
   return redirect(url_for('dashboard'))
 
@@ -149,13 +150,13 @@ def join_group(id):
   if group is None:
     abort(404)
   if current_user.id in group.members:
-    return flash('Vous êtes déjà membre de ce groupe')
+    return flash('Vous êtes déjà membre de ce groupe', 'error')
   if group.private:
-    return flash('Ce groupe est privé')
+    return flash('Ce groupe est privé', 'error')
   else:
     group.members = group.members + [current_user.id]
     db.session.commit()
-    flash('Vous avez rejoint le groupe')
+    flash('Vous avez rejoint le groupe', 'success')
   return redirect(url_for('group', id=id))
 
 
@@ -166,14 +167,14 @@ def leave_group(id):
   if group is None:
     abort(404)
   if current_user.id in group.admins:
-    return flash('Vous êtes administrateur de ce groupe')
+    return flash('Vous êtes administrateur de ce groupe donc vous ne pouvez pas le quitter', 'error')
   if current_user.id not in group.members:
-    return flash('Vous n\'êtes pas membre de ce groupe')
+    return flash('Vous n\'êtes pas membre de ce groupe', 'error')
   else:
     listMembers = [member for member in group.members if member != current_user.id]
     group.members = listMembers
     db.session.commit()
-    flash('Vous avez quitté le groupe')
+    flash('Vous avez quitté le groupe', 'success')
   return redirect(url_for('group', id=id))
 
 
@@ -184,9 +185,9 @@ def delete_group(id):
   if group is None:
     abort(404)
   if current_user.id not in group.admins:
-    return flash('Vous n\'êtes pas administrateur de ce groupe')
+    return flash('Vous n\'êtes pas administrateur de ce groupe', 'error')
   else:
     db.session.delete(group)
     db.session.commit()
-    flash('Le groupe a été supprimé')
+    flash('Le groupe a été supprimé', 'success')
   return redirect(url_for('dashboard'))
