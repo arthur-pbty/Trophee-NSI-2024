@@ -43,9 +43,9 @@ def register():
       db.session.add(new_user)
       db.session.commit()
       login_user(new_user)
-      return redirect(url_for('home'), title='Inscription')
+      return redirect(url_for('home'))
 
-  return render_template('register.html')
+  return render_template('register.html', title='Inscription')
 
 
 @app.route('/logout')
@@ -57,14 +57,15 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-  groupsPublic = Groups.query.filter_by(private=False).all()
-  myGroups = []
+  myGroupsAdmin = []
+  myGroupsMember = []
   for group in Groups.query.all():
     if current_user.id in group.admins:
-      myGroups.append(group)
-  print(myGroups)
+      myGroupsAdmin.append(group)
+    if current_user.id in group.members:
+      myGroupsMember.append(group)
 
-  return render_template('dashboard.html', title='Tableau de bord', current_user=current_user, myGroups=myGroups, groupsPublic=groupsPublic)
+  return render_template('dashboard.html', title='Tableau de bord', current_user=current_user, myGroupsAdmin=myGroupsAdmin, myGroupsMember=myGroupsMember)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -113,7 +114,7 @@ def create_group():
     if Groups.query.filter_by(name=name).first():
       flash('Ce nom de groupe est déjà pris')
     else:
-      new_group = Groups(name=name, description=description, private=private, admins=[current_user.id])
+      new_group = Groups(name=name, description=description, private=private, admins=[current_user.id], members=[current_user.id])
       db.session.add(new_group)
       db.session.commit()
       flash('Le groupe a été créé.')
@@ -128,5 +129,64 @@ def create_group():
 def group(id):
   group = Groups.query.get(id)
   if group is None:
-      abort(404)
-  return render_template('group.html', title=group.name, group=group)
+    abort(404)
+  is_admin = current_user.id in group.admins
+  is_member = current_user.id in group.members  
+  return render_template('group.html', title=group.name, group=group, is_admin=is_admin, is_member=is_member)
+
+
+@app.route('/chercheGroup')
+@login_required
+def chercheGroup():
+  groupsPublic = Groups.query.filter_by(private=False).all()
+  return render_template('chercheGroup.html', title='Recherche de groupe', groupsPublic=groupsPublic)
+
+
+@app.route('/join_group/<int:id>')
+@login_required
+def join_group(id):
+  group = Groups.query.get(id)
+  if group is None:
+    abort(404)
+  if current_user.id in group.members:
+    return flash('Vous êtes déjà membre de ce groupe')
+  if group.private:
+    return flash('Ce groupe est privé')
+  else:
+    group.members = group.members + [current_user.id]
+    db.session.commit()
+    flash('Vous avez rejoint le groupe')
+  return redirect(url_for('group', id=id))
+
+
+@app.route('/leave_group/<int:id>')
+@login_required
+def leave_group(id):
+  group = Groups.query.get(id)
+  if group is None:
+    abort(404)
+  if current_user.id in group.admins:
+    return flash('Vous êtes administrateur de ce groupe')
+  if current_user.id not in group.members:
+    return flash('Vous n\'êtes pas membre de ce groupe')
+  else:
+    listMembers = [member for member in group.members if member != current_user.id]
+    group.members = listMembers
+    db.session.commit()
+    flash('Vous avez quitté le groupe')
+  return redirect(url_for('group', id=id))
+
+
+@app.route('/delete_group/<int:id>')
+@login_required
+def delete_group(id):
+  group = Groups.query.get(id)
+  if group is None:
+    abort(404)
+  if current_user.id not in group.admins:
+    return flash('Vous n\'êtes pas administrateur de ce groupe')
+  else:
+    db.session.delete(group)
+    db.session.commit()
+    flash('Le groupe a été supprimé')
+  return redirect(url_for('dashboard'))

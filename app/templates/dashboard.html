@@ -11,9 +11,6 @@
   <div>
     <h2 class="pt-8">Créer un groupe</h2>
     <form action="{{ url_for('create_group') }}" method="post">
-      {% with messages = get_flashed_messages() %} {% if messages %}
-        <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-      {% endif %} {% endwith %}
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
           Nom du groupe
@@ -39,13 +36,25 @@
       </div>
     </form>
   </div>
-  <div>
+  <div class="pb-8">
     <h2 class="pt-8">Liste de mes groupes :</h2>
     <ul>
-      {% for group in myGroups %}
+      <h3>Liste des groupes ou je suis admin :</h3>
+      {% for group in myGroupsAdmin %}
         <li>
           <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
         </li>
       {% endfor %}
+    </ul>
+    <ul>
+      <h3>Liste des groupes ou je suis membre :</h3>
+      {% for group in myGroupsMember %}
+        <li>
+          <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <a href="{{ url_for('chercheGroup') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Rechercher des Groupe Public</a>
 
 {% endblock %}

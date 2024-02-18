@@ -4,9 +4,6 @@
 <h1 class="text-2xl mb-4">Connexion</h1>
 <a href="{{ url_for('home') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Accueil</a>
 <form method="POST" action="{{ url_for('login') }}" class="pt-8">
-  {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-  {% endif %} {% endwith %}
   <div class="mb-4">
     <label class="block text-gray-700 text-sm font-bold mb-2" for="username"
       >Nom d'utilisateur</label

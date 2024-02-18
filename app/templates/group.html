@@ -1,7 +1,27 @@
 {% extends "compoments/base.html" %}
 {% block content %}
 
+<div>
+  <a href="{{ url_for('dashboard') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Retour</a>
+</div>
+
 <h1>{{ group.name }}</h1>
 <p>{{ group.description }}</p>
+
+{% if group.private %}
+  <p>Ce groupe est privé</p>
+{% else %}
+  <p>Ce groupe est public</p>
+{% endif %}
+
+{% if is_admin %}
+  <a href="{{ url_for('delete_group', id=group.id) }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Supprimer</a>
+{% endif %}
+
+{% if is_member %}
+  <a href="{{ url_for('leave_group', id=group.id) }}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Quitter</a>
+{% else %}
+  <a href="{{ url_for('join_group', id=group.id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Rejoindre</a>
+{% endif %}
 
 {% endblock %}

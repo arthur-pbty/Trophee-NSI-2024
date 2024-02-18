@@ -3,9 +3,6 @@
 
 <h1>Profil</h1>
 <form method="POST">
-  {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-  {% endif %} {% endwith %}
   <label for="username">Nom d'utilisateur</label>
   <input id="username" name="username" type="text" value="{{ current_user.username }}">
 

@@ -1,0 +1,14 @@
+{% extends "compoments/base.html" %}
+{% block content %}
+
+<h1>{{ title }}</h1>
+<h2>Liste des groupe Public :</h2>
+<ul>
+  {% for group in groupsPublic %}
+    <li>
+      <a href="{{ url_for('group', id=group.id) }}">{{ group.name }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

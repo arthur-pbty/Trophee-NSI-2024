@@ -1,9 +1,6 @@
 {% extends "compoments/base.html" %}
 {% block content %}
 
-{% with messages = get_flashed_messages() %} {% if messages %}
-  <div class="bg-red-500 text-white font-bold py-2 px-4 rounded">{{ messages[0] }}</div>
-{% endif %} {% endwith %}
 <h1 class="text-4xl mb-6">Bienvenue sur notre site !</h1>
 {% if current_user.is_authenticated %}
   <p class="mb-6">Vous êtes connecté en tant que {{ current_user.username }}.</p>
